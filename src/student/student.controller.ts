@@ -16,6 +16,7 @@ import { UpdateStudentDto } from 'src/student/dto/update-student.dto';
 import { PaginationStudentDto } from './dto/pagination-student.dto';
 import { PaginatedStudentDto } from './dto/paginatedStudent.dto';
 
+//Decorator @ sử dụng ở đây để tạo ra 1 instance dùng mãi mãi k tạo các instance mới
 @Controller('student')
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
@@ -25,9 +26,7 @@ export class StudentController {
   }
 
   @Get()
-  async findAll(
-    @Query() paginationDto: PaginationStudentDto,
-  ): Promise<PaginatedStudentDto> {
+  async findAll(@Query() paginationDto: PaginationStudentDto) {
     paginationDto.page = Number(paginationDto.page);
     paginationDto.limit = Number(paginationDto.limit);
     return this.studentService.findAll({
