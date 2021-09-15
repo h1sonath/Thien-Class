@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { StudentModule } from './student/student.module';
-import { TeacherModule } from './teacher/teacher.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from 'src/filters/http-exception.filter';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -18,10 +20,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       synchronize: true,
     }),
     StudentModule,
-    TeacherModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
   exports: [],
 })
 export class AppModule {}
